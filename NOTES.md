@@ -18,7 +18,7 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 **How I verified it:** `tests/test_payments.py` failed on the original code with `paid_cents` 2400 != 1200. After the fix the retry stays at 1200, one row, and daily revenue 1200. The partial-payment test stays at 1200 and status `paid`. Full suite passes. A cancelled order still returns 409 and writes no payment row.
 
-**Commits:** d90cb2a
+**Commits:** 581b938
 
 ## 2. Report
 
@@ -34,7 +34,7 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 **How I verified it:** `tests/test_cancel.py` failed on the original code with stock 0 != 3 after cancelling the pending order. After the fix the stock is 3, the one-use coupon is usable again, and a new order for those three tees succeeds. `test_cancel_paid_order_restocks` still passes. Full suite passes.
 
-**Commits:** 43803f7
+**Commits:** 49fa39c
 
 ## 3. Report
 
@@ -50,7 +50,7 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 **How I verified it:** `tests/test_pricing.py` failed on the original code with tax 87 != 78 for the CA order with `TEN`. After the fix that order is discount 120, tax 78, total 1158. The no-coupon assertion stays at tax 87 and total 1287, and the original CA test (two mugs and a tee, no coupon, tax 355) still passes. Full suite passes.
 
-**Commits:** a086a22
+**Commits:** 415dca5
 
 ## 4. Report
 
@@ -66,7 +66,7 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 **How I verified it:** `tests/test_reports.py` failed on the original code: 15 Jun revenue was 0, not 2400. The test pays three times: 08:00 IST on the 15th (02:30Z), 00:15 IST on the 15th (14 Jun 18:45Z, inside the half hour a 5-hour shift would miss), and 23:30 IST on the 14th (14 Jun 18:00Z), which must stay on the 14th. After the fix, 15 Jun is 2400 cents and 2 orders, 14 Jun is 1200 cents and 1 order. The original UTC daily-sales test still passes. Full suite passes. Printed bounds after the fix: 15 Jun is `2025-06-14T18:30:00Z` to `2025-06-15T18:30:00Z`.
 
-**Commits:** a73a953
+**Commits:** 25ded51
 
 ## 5. Report
 
@@ -82,7 +82,7 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 **How I verified it:** `tests/test_stock.py` opens two connections to one database file, warms the second cache, reserves from the first, and expects the second reserve to raise. On the original code `OutOfStock` was not raised. After the fix it is raised and the row stays at 0. `test_out_of_stock` still passes, including the rollback that leaves stock untouched when the order cannot be created. Full suite passes.
 
-**Commits:** 6552761
+**Commits:** 55bc306
 
 ## 6. Open question
 
@@ -98,7 +98,7 @@ Status is one of: `fixed`, `partly fixed`, `not fixed`. Commits: the short hashe
 
 **How I verified it:** `tests/test_overpay.py` failed on the previous code with `KeyError: 'overpaid_cents'`. After the change the second webhook is 200, `overpaid_cents` is 1200, two payment rows exist, and ship returns `shipped`. A retry of the same id stays at received 1200 and overpaid 0. Full suite passes.
 
-**Commits:** 4daa02e
+**Commits:** 742658f
 
 ## Other things I noticed
 
