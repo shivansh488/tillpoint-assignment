@@ -59,3 +59,13 @@ class Payments:
             "SELECT COALESCE(SUM(amount_cents), 0) AS paid FROM payments WHERE order_id = ?", (order_id,)
         ).fetchone()
         return row["paid"]
+
+    def balance(self, order_id, total_cents):
+        """How much has actually arrived, and how much of it is above the order total.
+
+        A second, different payment is kept: the provider has already taken the money,
+        and it retries until it gets a 2xx, so refusing the webhook would hide the charge
+        and would not give the money back. Callers can see overpaid_cents and refund it.
+        """
+        received = self.paid_cents(order_id)
+        return {"received_cents": received, "overpaid_cents": max(0, received - total_cents)}

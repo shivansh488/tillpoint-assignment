@@ -1,6 +1,7 @@
 """Creating, cancelling and listing orders."""
 from . import db, pricing
 from .catalog import Catalog
+from .payments import Payments
 
 
 class OrderError(Exception):
@@ -78,6 +79,7 @@ class Orders:
         order = dict(row)
         order["items"] = [dict(r) for r in self.conn.execute(
             "SELECT sku, qty, unit_price_cents FROM order_items WHERE order_id = ? ORDER BY rowid", (order_id,))]
+        order.update(Payments(self.conn).balance(order_id, order["total_cents"]))
         return order
 
     def list_for(self, customer, page=1, per_page=20):
