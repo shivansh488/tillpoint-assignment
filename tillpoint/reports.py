@@ -5,9 +5,13 @@ from . import db
 
 
 def day_bounds_utc(day, utc_offset_minutes=0):
-    """The UTC instants at which a shop-local calendar day starts and ends. day is 'YYYY-MM-DD'."""
-    start = datetime.strptime(day, "%Y-%m-%d").replace(tzinfo=timezone.utc)
-    start += timedelta(minutes=utc_offset_minutes)
+    """The UTC instants at which a shop-local calendar day starts and ends. day is 'YYYY-MM-DD'.
+
+    utc_offset_minutes is minutes east of UTC, so India is 330. Local midnight is that
+    many minutes earlier in UTC; a positive offset must be subtracted, not added.
+    """
+    local_midnight = datetime.strptime(day, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    start = local_midnight - timedelta(minutes=utc_offset_minutes)
     return db.to_iso(start), db.to_iso(start + timedelta(days=1))
 
 
