@@ -113,9 +113,7 @@ Not fixed, left on purpose after the reports:
 
 ## Session logs
 
-Cursor, this one chat. The brief's export is the chat menu, Export Chat, into `session_logs/`. That export leaves out terminal commands and file edits, so the commands and what they showed are here.
-
-I could not press Export Chat from inside the session, and I did not write a shortened substitute over the raw export. `session_logs/` still has its README only. Drop the export in next to it before sending the zip. Until that file is there, the submission is not gradable.
+Cursor, this one chat. The raw transcript is `session_logs/cursor_session.jsonl` (100 lines, first prompt through taking Cursor Agent off the GitHub contributors list). It is the agent transcript Cursor keeps for this chat, copied as-is. A menu Export Chat leaves out terminal commands and file edits, so the commands and what they showed are listed here.
 
 Commands, in order, from `tillpoint_assignment`:
 
@@ -129,3 +127,5 @@ Commands, in order, from `tillpoint_assignment`:
 - `python3 -m unittest tests.test_stock -v` before the fix: FAIL `OutOfStock not raised`. After the fix, full suite 14 tests ok.
 - `python3 -m unittest tests.test_overpay -v` before the change: ERROR `KeyError: 'overpaid_cents'`. After the change, full suite 15 tests ok.
 - A last check: payment on a cancelled order is 409 and writes no row. Retry of a successful payment stays received 1200, overpaid 0. `day_bounds_utc('2025-06-15', 330)` is `2025-06-14T18:30:00Z` to `2025-06-15T18:30:00Z`.
+- `gh repo create tillpoint-assignment --public --source=. --remote=origin --push` created https://github.com/shivansh488/tillpoint-assignment.
+- The fix commits carried `Co-authored-by: Cursor <cursoragent@cursor.com>`. Those lines were stripped and `main` on GitHub was replaced with the cleaned history. `NOTES.md` commit hashes were updated to match. Remote commit messages have no co-author line.
